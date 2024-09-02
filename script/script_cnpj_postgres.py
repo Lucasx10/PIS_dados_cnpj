@@ -8,6 +8,11 @@ from sqlalchemy import create_engine
 from pySmartDL import SmartDL
 import psycopg2
 from bs4 import BeautifulSoup
+from decouple import Config, RepositoryEnv
+
+# Carregar variáveis do arquivo .env
+ENV_PATH = os.path.join(os.path.dirname(__file__), '..', '.env')
+config = Config(RepositoryEnv(ENV_PATH))
 
 class DB_CNPJ:
     def __init__(self, user, password, host, port, database, schema):
@@ -310,12 +315,12 @@ def create_schema(USER, PASSWORD, HOST, PORT, DATABASE):
                 print(f'ERROR {e}')
 
 if __name__ == "__main__":
-    USER = 'postgres'
-    PASSWORD = '1234567890'
-    HOST = 'localhost'
-    PORT = '5432'
-    DATABASE = 'postgres'
-    SCHEMA = 'cnpj'
+    USER = config('DB_USER')
+    PASSWORD = config('DB_PASSWORD')
+    HOST = config('DB_HOST')
+    PORT = config('DB_PORT')
+    DATABASE = config('DB_DATABASE')
+    SCHEMA = config('DB_SCHEMA')
 
     create_schema(USER, PASSWORD, HOST, PORT, DATABASE)
     obj = DB_CNPJ(USER, PASSWORD, HOST, PORT, DATABASE, SCHEMA)
