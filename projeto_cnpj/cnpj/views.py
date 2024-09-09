@@ -138,3 +138,6 @@ def salvar_busca(request):
         
         return redirect('buscar_socio')
 
+def tabela_socios(request):
+    socios = Busca.objects.all()  # Obtém todos os sócios da tabela
+    return render(request, 'table.html', {'socios': socios})
