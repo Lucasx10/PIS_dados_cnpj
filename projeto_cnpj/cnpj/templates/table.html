@@ -122,7 +122,10 @@
                                       <th>
                                         UF
                                       </th>
-                                      <th class="text-right">
+                                      <th>
+                                        Data Inicio
+                                      </th>
+                                      <th>
                                         Capital Social
                                       </th>
                                     </thead>
@@ -141,7 +144,10 @@
                                         <td>
                                             {{ socio.st_uf}}
                                         </td>
-                                        <td class="text-right">
+                                        <td>
+                                            {{ socio.dt_inicio_atividade}}
+                                        </td>
+                                        <td>
                                           {{ socio.vl_capital_social }}
                                         </td>
                                       </tr>
@@ -152,7 +158,6 @@
                                       {% endfor %}
                                     </tbody>
                                   </table>
-                                  
                             </div>
                           </div>
                         </div>

@@ -16,14 +16,20 @@ def home(request):
         for uf in uf_counts
     ]
     
-    # Passar a contagem, a média e as porcentagens para o template
+    # Buscar o CNAE principal mais listado
+    cnae_principal_mais_listado = Busca.objects.values('cnae_principal').annotate(count=Count('cnae_principal')).order_by('-count').first()
+    cnae_mais_listado = cnae_principal_mais_listado['cnae_principal'] if cnae_principal_mais_listado else 'N/A'
+
+    # Passar a contagem, a média, as porcentagens e o CNAE para o template
     context = {
         'row_count': count,
         'media': media,
-        'uf_percentages': uf_percentages
+        'uf_percentages': uf_percentages,
+        'cnae_mais_listado': cnae_mais_listado
     }
     
     return render(request, 'dashboard.html', context)
+
 
 def relatorio_uf(request):
     # Conta o número de vezes que cada UF aparece
@@ -81,10 +87,10 @@ def buscar_socio(request):
                         vl_capital_social_str = vl_capital_social_str.replace('.', '').replace(',', '.')
                         vl_capital_social = float(vl_capital_social_str)
                     else:
-                        vl_capital_social = None
+                        vl_capital_social = 0.0
                 else:
-                    st_razao_social = None
-                    vl_capital_social = None
+                    st_razao_social = 'S/N'
+                    vl_capital_social = 0.0
                 
                 busca_existente = Busca.objects.filter(nome=nome, cpf=cpf).exists()
                 
@@ -123,9 +129,9 @@ def salvar_busca(request):
             try:
                 vl_capital_social = float(vl_capital_social_str)
             except ValueError:
-                vl_capital_social = None
+                vl_capital_social = 0.0
         else:
-            vl_capital_social = None
+            vl_capital_social = 0.0
         
         
         busca = Busca.objects.create(

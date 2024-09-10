@@ -70,7 +70,7 @@
                 </li>
                 <li>
                     <a href="{% url 'tabela_socios' %}">
-                        <i class="ti-view-list-alt"></i>
+                        <i class="ti-user"></i>
                         <p>Tabela de Socios</p>
                     </a>
                 </li>
@@ -140,6 +140,31 @@
                                         <div class="numbers">
                                             <p>Media Capital Social</p>
                                             R$ {{ media|floatformat:2 }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <hr />
+                                    <div class="stats">
+                                        <i class="ti-reload"></i> Updated now
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-5 d-flex">
+                                        <div class="icon-big icon-danger text-center">
+                                            <i class="ti-pie-chart"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-7 d-flex">
+                                        <div class="numbers">
+                                            <p>Categoria mais listada</p>
+                                            {{ cnae_mais_listado }}
                                         </div>
                                     </div>
                                 </div>
