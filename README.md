@@ -12,6 +12,29 @@ O projeto consiste em:
 - Python 3.x
 - PostgreSQL
 - pip
+- Git
+
+## Explicação do projeto
+- **[script_cnpj_postgres.py](https://github.com/Lucasx10/PIS_dados_cnpj/blob/main/script/script_cnpj_postgres.py)**
+
+    #### Carregar variáveis de ambiente:
+
+    ```python
+        ENV_PATH = os.path.join(os.path.dirname(__file__), '..', '.env')
+        config = Config(RepositoryEnv(ENV_PATH))
+    ```
+O código carrega variáveis do arquivo .env para definir credenciais do banco de dados.
+
+
+`get_latest_url()`: 
+1. Busca a última URL no 'http://200.152.38.155/CNPJ/dados_abertos_cnpj/', Faz scraping da página de dados abertos e encontra o link mais recente de arquivos disponíveis para download.
+
+2. Faz uma requisição HTTP à URL base e lê o conteúdo HTML da página para extrair uma tabela de links para arquivos .zip.
+
+3. O DataFrame resultante é filtrado para incluir apenas arquivos .zip.
+
+`create_table()`: Cria uma tabela no banco de dados
+Verifica se a tabela já existe e, se não, cria uma nova tabela baseada nos layouts definidos.
 
 ### Passos
 
