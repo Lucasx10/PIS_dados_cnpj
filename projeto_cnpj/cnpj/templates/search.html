@@ -126,7 +126,9 @@
                                     <p class="text-center">Buscando...</p>
                                 </div>
 
-                                    {% if resultado %}
+                                {% if mensagem %}
+                                    <p class="text-danger text-center">{{ mensagem }}</p>
+                                {% elif resultado %}
                                     <div class="content table-responsive table-full-width">
                                         <table class="table table-striped">
                                             <thead>

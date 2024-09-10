@@ -55,6 +55,7 @@ def relatorio_data(request):
     return JsonResponse({'labels': labels, 'data': data})
 
 def buscar_socio(request):
+    mensagem = ''
     if request.method == 'POST':
         nome = request.POST.get('nome', '')
         cpf = request.POST.get('cpf', '')
@@ -106,10 +107,14 @@ def buscar_socio(request):
                     'vl_capital_social': vl_capital_social,
                     'busca_existente': busca_existente
                 }
+        
+        if not resultado:
+            mensagem = 'Nenhum resultado encontrado.'
 
-        return render(request, 'search.html', {'resultado': resultado})
+        return render(request, 'search.html', {'resultado': resultado, 'mensagem': mensagem})
     
     return render(request, 'search.html')
+
 
 def salvar_busca(request):
     if request.method == 'POST':
