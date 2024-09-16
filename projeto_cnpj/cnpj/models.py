@@ -10,6 +10,11 @@ class Socio(models.Model):
         db_table = 'tb_socio'  
 
 class Busca(models.Model):
+    CURSO_CHOICES = (
+        ('CC', "Ciencia da computacaoo"),
+        ('LI', "Licenciatura em informatica"),
+    )
+    
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=14)
     cnpj_base = models.CharField(max_length=20, blank=True, null=True)
@@ -19,6 +24,7 @@ class Busca(models.Model):
     dt_inicio_atividade = models.CharField(blank=True, null=True)
     vl_capital_social = models.FloatField(blank=True, null=True)
     st_uf = models.CharField(max_length=2, blank=True, null=True)
+    curso = models.CharField(max_length=2, choices=CURSO_CHOICES, default='CC')
     
 class Estabelecimento(models.Model):
     st_nome_fantasia = models.CharField(max_length=200, blank=True, null=True)

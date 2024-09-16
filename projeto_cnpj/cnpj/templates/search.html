@@ -177,6 +177,19 @@
                                             <input type="hidden" name="dt_inicio_atividade" value="{{ resultado.dt_inicio_atividade }}">
                                             <input type="hidden" name="st_uf" value="{{ resultado.st_uf }}">
                                             <input type="hidden" name="vl_capital_social" value="{{ resultado.vl_capital_social }}">
+                                            
+                                            <!-- Campo para seleção do curso -->
+                                            <div class="form-group" style="margin-left: 20px;">
+                                                <label for="curso">Curso do egresso
+                                                    <select name="curso" id="curso" class="form-control" required>
+                                                        <option value="">--Selecione um curso--</option>
+                                                        <option value="CC">Ciência da Computação</option>
+                                                        <option value="LI">Licenciatura em Informática</option>
+                                                    </select>
+                                                </label>
+                                                
+                                            </div>
+
                                             <div class="text-center col-md-12">
                                                 <button type="submit" class="btn btn-success btn-fill btn-wd">Salvar no banco de dados</button>
                                             </div>
@@ -212,6 +225,20 @@
     
 	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 	<script src="{% static '/js/demo.js' %}"></script>
+
+    <script>
+        const cursoSelect = document.getElementById('curso');
+        const saveButton = document.getElementById('saveButton');
+    
+        cursoSelect.addEventListener('change', function() {
+            if (cursoSelect.value) {
+                saveButton.disabled = false;
+            } else {
+                saveButton.disabled = true;
+            }
+        });
+    </script>
+    
 
     <script>
         const searchButton = document.getElementById('searchButton');

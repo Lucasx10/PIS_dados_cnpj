@@ -106,7 +106,19 @@
                           <div class="header">
                             <h4 class="card-title"> Socios Salvos</h4>
                           </div>
-                          <div class="card-body">
+                          <div class="card-body"> 
+                            <form method="get" action="{% url 'tabela_socios' %}">
+                              <div class="form-group" style="margin-left: 20px;">
+                                  <label for="curso">Filtrar por curso
+                                    <select name="curso" id="curso" class="form-control">
+                                        <option value="">-- Todos os cursos --</option>
+                                        <option value="CC">Ciência da Computação</option>
+                                        <option value="LI">Licenciatura em Informática</option>
+                                    </select>
+                                  </label>
+                              </div>
+                              <button type="submit" class="btn btn-info" style="margin-left: 20px;">Filtrar</button>
+                            </form>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead class=" text-primary">
@@ -127,6 +139,9 @@
                                       </th>
                                       <th>
                                         Capital Social
+                                      </th>
+                                      <th>
+                                        Curso
                                       </th>
                                     </thead>
                                     <tbody>
@@ -149,6 +164,9 @@
                                         </td>
                                         <td>
                                           {{ socio.vl_capital_social }}
+                                        </td>
+                                        <td>
+                                          {{ socio.curso }}
                                         </td>
                                       </tr>
                                       {% empty %}

@@ -5,30 +5,34 @@ from django.db.models import Avg, Count, DateField
 from django.db.models.functions import TruncMonth, Cast
 
 def home(request):
-    count = Busca.objects.count()
-    media = Busca.objects.aggregate(Avg('vl_capital_social'))['vl_capital_social__avg']
-    
-    # Calcular a porcentagem de cada UF
-    total_count = Busca.objects.count()
-    uf_counts = Busca.objects.values('st_uf').annotate(count=Count('st_uf'))
-    uf_percentages = [
-        {'uf': uf['st_uf'], 'percentage': (uf['count'] / total_count) * 100}
-        for uf in uf_counts
-    ]
-    
-    # Buscar o CNAE principal mais listado
-    cnae_principal_mais_listado = Busca.objects.values('cnae_principal').annotate(count=Count('cnae_principal')).order_by('-count').first()
-    cnae_mais_listado = cnae_principal_mais_listado['cnae_principal'] if cnae_principal_mais_listado else 'N/A'
+    if Busca.objects.exists():
+        count = Busca.objects.count()
+        media = Busca.objects.aggregate(Avg('vl_capital_social'))['vl_capital_social__avg']
+        
+        # Calcular a porcentagem de cada UF
+        total_count = Busca.objects.count()
+        uf_counts = Busca.objects.values('st_uf').annotate(count=Count('st_uf'))
+        uf_percentages = [
+            {'uf': uf['st_uf'], 'percentage': (uf['count'] / total_count) * 100}
+            for uf in uf_counts
+        ]
+        
+        # Buscar o CNAE principal mais listado
+        cnae_principal_mais_listado = Busca.objects.values('cnae_principal').annotate(count=Count('cnae_principal')).order_by('-count').first()
+        cnae_mais_listado = cnae_principal_mais_listado['cnae_principal'] if cnae_principal_mais_listado else 'N/A'
 
-    # Passar a contagem, a média, as porcentagens e o CNAE para o template
-    context = {
-        'row_count': count,
-        'media': media,
-        'uf_percentages': uf_percentages,
-        'cnae_mais_listado': cnae_mais_listado
-    }
-    
-    return render(request, 'dashboard.html', context)
+        # Passar a contagem, a média, as porcentagens e o CNAE para o template
+        context = {
+            'row_count': count,
+            'media': media,
+            'uf_percentages': uf_percentages,
+            'cnae_mais_listado': cnae_mais_listado
+        }
+        
+        return render(request, 'dashboard.html', context)
+    else:
+        # Renderizar a página sem dados, ou com uma mensagem informativa
+        return render(request, 'dashboard.html', {'mensagem': 'Nenhum dado encontrado.'})
 
 
 def relatorio_uf(request):
@@ -127,6 +131,11 @@ def salvar_busca(request):
         dt_inicio_atividade = request.POST.get('dt_inicio_atividade')
         st_uf = request.POST.get('st_uf')
         vl_capital_social_str = request.POST.get('vl_capital_social')
+        curso = request.POST.get('curso')
+        
+        if not curso:
+            # Se nenhum curso for selecionado, exibir um erro
+            return render(request, 'search.html', {'mensagem': 'Selecione um curso antes de salvar.'})
         
         if vl_capital_social_str:
             # Substituir vírgula por ponto
@@ -143,12 +152,20 @@ def salvar_busca(request):
             nome=nome, cpf=cpf, cnpj_base=cnpj_base,
             nome_fantasia=st_nome_fantasia, motivo_situacao_cadastral=cd_motivo_situacao_cadastral,
             cnae_principal=cd_cnae_principal, dt_inicio_atividade=dt_inicio_atividade, st_uf=st_uf,
-            vl_capital_social=vl_capital_social
+            vl_capital_social=vl_capital_social, curso=curso
         )
         busca.save()
         
         return redirect('buscar_socio')
 
 def tabela_socios(request):
-    socios = Busca.objects.all()  # Obtém todos os sócios da tabela
-    return render(request, 'table.html', {'socios': socios})
+    if Busca.objects.exists():
+        curso = request.GET.get('curso', None)
+        if curso:
+            socios = Busca.objects.filter(curso=curso)
+        else:
+            socios = Busca.objects.all()
+        return render(request, 'table.html', {'socios': socios})
+    else:
+        # Exibir uma página de dashboard sem dados ou com uma mensagem informativa
+        return render(request, 'table.html', {'mensagem': 'Nenhum dado encontrado.'})
